@@ -1,0 +1,72 @@
+# [START swagger]
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "ILO Order-POC API"
+  description: "This API is used for POC of GCP by Integration Team - Capability Area - Inventory Logistics Operations"
+  contact: 
+    email: robert.bernhard1@ikea.com
+    name: Robert BERNHARD
+tags:
+- name: ILOOrder
+  description: "Inventory Logistics Operations Order"
+externalDocs:
+  description: "Find out more about" 
+  url: https://confluence.build.ingka.ikea.com/x/tIJyBg
+security:
+    - api_key: []
+host: "captain-007.appspot.com"
+schemes:
+ - "https"
+ - "http"
+securityDefinitions:
+  # This section configures basic authentication with an API key.
+  api_key:
+    type: apiKey
+    name: api_key
+    in: "query"
+paths:
+  /order/count:
+    get:
+      tags:
+      - ILOOrder
+      summary: "Get Order Counts"
+      description: "Returns a Order Header and Line Count for certain time range (from and to datetime)"
+      operationId: getOrderCount
+      produces:
+      - application/json
+      - application/xml
+      parameters:
+        - in: query
+          name: fromDateTime
+          type: string
+          format: date-time
+          required: true
+          description: "Valid from DateTime in UTC format 'YYYY-MM-DDThh:mm:ssZ' 2017-07-21T17:32:28Z"
+        - in: query
+          name: toDateTime
+          type: string
+          format: date-time
+          required: true
+          description: "Valid to DateTime in UTC format 'YYYY-MM-DDThh:mm:ssZ' 2017-07-21T17:32:28Z"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/OrderCount"
+        400:
+          description: "Invalid ValidFrom or/and ValidTo DateTime"
+definitions:
+  OrderCount:
+    type: object
+    properties:
+      headCount:
+        type: integer
+        format: int64
+        example: 4715
+      lineCount:
+        type: integer
+        format: int64
+        example: 12320
+    xml:
+      name: OrderCount
